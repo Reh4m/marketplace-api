@@ -1,0 +1,42 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false,
+      "dynamicImport": true,
+      "decorators": true
+    },
+    "transform": {
+      "legacyDecorator": true,
+      "decoratorMetadata": true
+    },
+    "target": "es2020",
+    "externalHelpers": false,
+    "keepClassNames": true,
+    "loose": false,
+    "minify": {
+      "compress": false,
+      "mangle": false
+    },
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"],
+      "@config": ["config"],
+      "@database": ["database"],
+      "@graphql/*": ["graphql/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@models/*": ["models/*"],
+      "@models": ["models"],
+      "@resolvers/*": ["resolvers/*"],
+      "@resolvers": ["resolvers"],
+      "@schemas/*": ["schemas/*"],
+      "@services/*": ["services/*"],
+      "@typedefs/*": ["typedefs/*"],
+      "@utils/*": ["utils/*"]
+    }
+  },
+  "module": {
+    "type": "commonjs"
+  }
+}

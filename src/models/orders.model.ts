@@ -1,0 +1,46 @@
+import { modelOptions, prop as Property, Ref } from "@typegoose/typegoose";
+import { Field, Int, ObjectType } from "type-graphql";
+import { Types } from "mongoose";
+
+import { User } from "@models/users.model";
+import { OrderDetails } from "@typedefs/order-details.type";
+import { Address } from "@typedefs/addresses.type";
+
+@ObjectType()
+@modelOptions({
+  schemaOptions: {
+    timestamps: true,
+  },
+})
+export class Order {
+  @Field(() => Types.ObjectId)
+  readonly _id?: Types.ObjectId;
+
+  @Field(() => Date, { nullable: true })
+  @Property({ default: new Date() })
+  orderDate?: Date;
+
+  @Field(() => Date, { nullable: true })
+  @Property()
+  shippedDate?: Date;
+
+  @Field(() => User)
+  @Property({ ref: () => User, required: true })
+  owner: Ref<User>;
+
+  @Field(() => Address)
+  @Property({ required: true })
+  shipAddress: Address;
+
+  @Field(() => [OrderDetails])
+  @Property({ required: true })
+  details: OrderDetails[];
+
+  @Field({ nullable: true })
+  @Property()
+  coupon?: string;
+
+  @Field(() => Int, { nullable: true })
+  @Property()
+  couponDiscount?: number;
+}
