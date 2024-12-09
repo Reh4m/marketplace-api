@@ -57,15 +57,15 @@ export class Product {
   @Field((type) => Types.ObjectId)
   readonly _id?: Types.ObjectId;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   name: string;
 
-  @Field((type) => String)
+  @Field()
   @Property()
   description: string;
 
-  @Field(() => String)
+  @Field()
   @Property()
   images: string;
 

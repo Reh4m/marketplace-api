@@ -186,9 +186,9 @@ type Order {
 }
 
 type OrderDetails {
-  discount: Float
+  discount: Int
   product: Product!
-  quantity: Float!
+  quantity: Int!
   unitPrice: Float!
 }
 
@@ -262,7 +262,7 @@ type Query {
   getCategoryByName(categoryName: String!): Category!
   getCouponByCode(code: String!): Coupon!
   getCoupons: [Coupon!]!
-  getCurrentUser: User
+  getCurrentUser: User!
   getOrderById(orderId: ObjectId!): Order!
   getProductById(productId: ObjectId!): Product!
   getProducts(filter: FilterInput, pageNum: Int!, pageSize: Int!, sort: SortInput!): InfiniteScrollProducts!

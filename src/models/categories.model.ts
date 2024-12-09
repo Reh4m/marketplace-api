@@ -12,15 +12,15 @@ export class Category {
   @Field(() => Types.ObjectId)
   readonly _id?: Types.ObjectId;
 
-  @Field(() => String)
+  @Field()
   @Property({ required: true, unique: true })
   name: string;
 
-  @Field(() => String, { nullable: true })
+  @Field({ nullable: true })
   @Property()
   description?: string;
 
-  @Field(() => String, { nullable: true })
+  @Field({ nullable: true })
   @Property()
   picture?: string;
 }

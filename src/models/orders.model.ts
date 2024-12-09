@@ -13,26 +13,26 @@ import { Address } from "@typedefs/addresses.type";
   },
 })
 export class Order {
-  @Field(() => Types.ObjectId)
+  @Field((type) => Types.ObjectId)
   readonly _id?: Types.ObjectId;
 
-  @Field(() => Date, { nullable: true })
+  @Field((type) => Date, { nullable: true })
   @Property({ default: new Date() })
   orderDate?: Date;
 
-  @Field(() => Date, { nullable: true })
+  @Field((type) => Date, { nullable: true })
   @Property()
   shippedDate?: Date;
 
-  @Field(() => User)
+  @Field((type) => User)
   @Property({ ref: () => User, required: true })
   owner: Ref<User>;
 
-  @Field(() => Address)
+  @Field((type) => Address)
   @Property({ required: true })
   shipAddress: Address;
 
-  @Field(() => [OrderDetails])
+  @Field((type) => [OrderDetails])
   @Property({ required: true })
   details: OrderDetails[];
 
@@ -40,7 +40,7 @@ export class Order {
   @Property()
   coupon?: string;
 
-  @Field(() => Int, { nullable: true })
+  @Field((type) => Int, { nullable: true })
   @Property()
   couponDiscount?: number;
 }

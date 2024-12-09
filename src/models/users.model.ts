@@ -43,23 +43,23 @@ export class User {
   @Field((type) => Types.ObjectId)
   readonly _id?: Types.ObjectId;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true, unique: true })
   username: string;
 
-  @Field((type) => String)
+  @Field()
   @Property()
   fullName: string;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true, unique: true })
   email: string;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   password: string;
 
-  @Field((type) => String, { nullable: true })
+  @Field({ nullable: true })
   @Property()
   phone?: string;
 

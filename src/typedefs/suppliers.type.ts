@@ -5,9 +5,9 @@ import { OrderDetails } from "@typedefs/order-details.type";
 
 @ObjectType()
 export class SupplierAndProducts {
-  @Field(() => Types.ObjectId)
+  @Field((type) => Types.ObjectId)
   supplierId: Types.ObjectId;
 
-  @Field(() => [OrderDetails])
+  @Field((type) => [OrderDetails])
   details: OrderDetails[];
 }

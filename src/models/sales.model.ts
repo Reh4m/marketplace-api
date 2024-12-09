@@ -26,26 +26,26 @@ registerEnumType(Status, {
   },
 })
 export class Sale {
-  @Field(() => Types.ObjectId)
+  @Field((type) => Types.ObjectId)
   readonly _id?: Types.ObjectId;
 
-  @Field(() => Order)
+  @Field((type) => Order)
   @Property({ ref: () => Order, required: true })
   order: Ref<Order>;
 
-  @Field(() => Date, { nullable: true })
+  @Field((type) => Date, { nullable: true })
   @Property({ default: new Date() })
   orderDate?: Date;
 
-  @Field(() => [OrderDetails])
+  @Field((type) => [OrderDetails])
   @Property({ required: true })
   details: OrderDetails[];
 
-  @Field(() => User)
+  @Field((type) => User)
   @Property({ ref: () => User, required: true })
   customer: Ref<User>;
 
-  @Field(() => Address)
+  @Field((type) => Address)
   @Property({ required: true })
   shipAddress: Address;
 
@@ -53,7 +53,7 @@ export class Sale {
   @Property({ enum: Status, default: Status.PENDING })
   status?: Status;
 
-  @Field(() => User)
+  @Field((type) => User)
   @Property({ ref: () => User, required: true })
   owner: Ref<User>;
 }

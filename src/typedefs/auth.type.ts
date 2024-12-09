@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 import { Types } from "mongoose";
 
 import { User } from "@models/users.model";
@@ -11,10 +11,10 @@ export class DataStoredInToken {
 
 @ObjectType()
 export class TokenData {
-  @Field((type) => String)
+  @Field()
   token: string;
 
-  @Field((type) => Number)
+  @Field((type) => Int)
   expiresIn: number;
 }
 
@@ -23,7 +23,7 @@ export class TokenWithUser {
   @Field((type) => User)
   user: User;
 
-  @Field((type) => String)
+  @Field()
   token: string;
 }
 

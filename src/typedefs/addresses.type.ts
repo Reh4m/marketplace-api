@@ -8,35 +8,35 @@ import { Field, ObjectType } from "type-graphql";
   },
 })
 export class Address {
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   name: string;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   contactName: string;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   contactPhone: string;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   address: string;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   city: string;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   region: string;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   country: string;
 
-  @Field((type) => String)
+  @Field()
   @Property({ required: true })
   postalCode: string;
 }

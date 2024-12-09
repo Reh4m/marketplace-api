@@ -7,6 +7,6 @@ export class InfiniteScrollProducts {
   @Field((type) => [Product])
   products: Product[];
 
-  @Field((type) => Boolean)
+  @Field()
   hasMore: boolean;
 }

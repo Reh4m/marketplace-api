@@ -35,7 +35,7 @@ const IsOwnerMiddleware: MiddlewareFn<RequestWithUser> = (
 @Resolver()
 export class UserResolver extends UserService {
   @Authorized()
-  @Query(() => User, { nullable: true })
+  @Query(() => User)
   public async getCurrentUser(@Ctx("user") currentUser: User): Promise<User> {
     if (!currentUser) return null;
 
@@ -110,11 +110,10 @@ export class UserResolver extends UserService {
     @Arg("userId") userId: Types.ObjectId,
     @Arg("productCartDetails") productCartDetails: CartItemInput
   ): Promise<CartItem[]> {
-    const userCart: CartItem[] =
-      await this.decreaseProductQuantityFromUserCart(
-        userId,
-        productCartDetails
-      );
+    const userCart: CartItem[] = await this.decreaseProductQuantityFromUserCart(
+      userId,
+      productCartDetails
+    );
 
     return userCart;
   }

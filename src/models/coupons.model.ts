@@ -23,11 +23,11 @@ registerEnumType(Status, {
 })
 @ObjectType()
 export class Coupon {
-  @Field((type) => String)
+  @Field()
   @Property({ required: true, unique: true })
   code: string;
 
-  @Field((type) => String, { nullable: true })
+  @Field({ nullable: true })
   @Property({ required: true })
   description?: string;
 

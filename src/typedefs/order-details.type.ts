@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, Float, Int, ObjectType } from "type-graphql";
 import { modelOptions, prop as Property } from "@typegoose/typegoose";
 
 import { Product } from "@models/products.model";
@@ -14,15 +14,15 @@ export class OrderDetails {
   @Property({ required: true })
   product: Product;
 
-  @Field((type) => Number)
+  @Field((type) => Float)
   @Property({ required: true })
   unitPrice: number;
 
-  @Field((type) => Number)
+  @Field((type) => Int)
   @Property({ required: true })
   quantity: number;
 
-  @Field((type) => Number, { nullable: true })
+  @Field((type) => Int, { nullable: true })
   @Property()
   discount?: number;
 }
