@@ -12,15 +12,15 @@ import { Product } from "@models/products.model";
 export class OrderDetails {
   @Field((type) => Product)
   @Property({ required: true })
-  product: Product;
+  product!: Product;
 
   @Field((type) => Float)
   @Property({ required: true })
-  unitPrice: number;
+  unitPrice!: number;
 
   @Field((type) => Int)
   @Property({ required: true })
-  quantity: number;
+  quantity!: number;
 
   @Field((type) => Int, { nullable: true })
   @Property()

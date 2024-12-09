@@ -14,7 +14,7 @@ export class Category {
 
   @Field()
   @Property({ required: true, unique: true })
-  name: string;
+  name!: string;
 
   @Field({ nullable: true })
   @Property()

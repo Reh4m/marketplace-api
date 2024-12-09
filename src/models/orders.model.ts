@@ -26,15 +26,15 @@ export class Order {
 
   @Field((type) => User)
   @Property({ ref: () => User, required: true })
-  owner: Ref<User>;
+  owner!: Ref<User>;
 
   @Field((type) => Address)
   @Property({ required: true })
-  shipAddress: Address;
+  shipAddress!: Address;
 
   @Field((type) => [OrderDetails])
   @Property({ required: true })
-  details: OrderDetails[];
+  details!: OrderDetails[];
 
   @Field({ nullable: true })
   @Property()

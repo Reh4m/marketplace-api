@@ -31,7 +31,7 @@ export class Sale {
 
   @Field((type) => Order)
   @Property({ ref: () => Order, required: true })
-  order: Ref<Order>;
+  order!: Ref<Order>;
 
   @Field((type) => Date, { nullable: true })
   @Property({ default: new Date() })
@@ -39,15 +39,15 @@ export class Sale {
 
   @Field((type) => [OrderDetails])
   @Property({ required: true })
-  details: OrderDetails[];
+  details!: OrderDetails[];
 
   @Field((type) => User)
   @Property({ ref: () => User, required: true })
-  customer: Ref<User>;
+  customer!: Ref<User>;
 
   @Field((type) => Address)
   @Property({ required: true })
-  shipAddress: Address;
+  shipAddress!: Address;
 
   @Field((type) => Status, { nullable: true })
   @Property({ enum: Status, default: Status.PENDING })
@@ -55,5 +55,5 @@ export class Sale {
 
   @Field((type) => User)
   @Property({ ref: () => User, required: true })
-  owner: Ref<User>;
+  owner!: Ref<User>;
 }

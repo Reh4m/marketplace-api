@@ -25,10 +25,10 @@ registerEnumType(Status, {
 export class Coupon {
   @Field()
   @Property({ required: true, unique: true })
-  code: string;
+  code!: string;
 
   @Field({ nullable: true })
-  @Property({ required: true })
+  @Property()
   description?: string;
 
   @Field((type) => Date, { nullable: true })
@@ -41,7 +41,7 @@ export class Coupon {
 
   @Field((type) => Int)
   @Property({ required: true })
-  discount: number;
+  discount!: number;
 
   @Field((type) => Status, { nullable: true })
   @Property({ enum: Status, default: Status.ACTIVE })
@@ -55,15 +55,15 @@ export class Coupon {
   @Property({ ref: Category, default: null })
   invalidCategories?: Ref<Category>[];
 
-  @Field((type) => Boolean, { nullable: true })
+  @Field({ nullable: true })
   @Property({ default: false })
   isPublic?: boolean;
 
-  @Field((type) => Boolean, { nullable: true })
+  @Field({ nullable: true })
   @Property({ default: false })
   onlyForOwnerProducts?: boolean;
 
   @Field((type) => User)
   @Property({ ref: () => User, required: true })
-  owner: Ref<User>;
+  owner!: Ref<User>;
 }

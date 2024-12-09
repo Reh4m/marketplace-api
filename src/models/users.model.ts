@@ -45,19 +45,19 @@ export class User {
 
   @Field()
   @Property({ required: true, unique: true })
-  username: string;
-
-  @Field()
-  @Property()
-  fullName: string;
-
-  @Field()
-  @Property({ required: true, unique: true })
-  email: string;
+  username!: string;
 
   @Field()
   @Property({ required: true })
-  password: string;
+  fullName!: string;
+
+  @Field()
+  @Property({ required: true, unique: true })
+  email!: string;
+
+  @Field()
+  @Property({ required: true })
+  password!: string;
 
   @Field({ nullable: true })
   @Property()

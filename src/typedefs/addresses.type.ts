@@ -10,33 +10,33 @@ import { Field, ObjectType } from "type-graphql";
 export class Address {
   @Field()
   @Property({ required: true })
-  name: string;
+  name!: string;
 
   @Field()
   @Property({ required: true })
-  contactName: string;
+  contactName!: string;
 
   @Field()
   @Property({ required: true })
-  contactPhone: string;
+  contactPhone!: string;
 
   @Field()
   @Property({ required: true })
-  address: string;
+  address!: string;
 
   @Field()
   @Property({ required: true })
-  city: string;
+  city!: string;
 
   @Field()
   @Property({ required: true })
-  region: string;
+  region!: string;
 
   @Field()
   @Property({ required: true })
-  country: string;
+  country!: string;
 
   @Field()
   @Property({ required: true })
-  postalCode: string;
+  postalCode!: string;
 }

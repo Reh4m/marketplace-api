@@ -59,23 +59,23 @@ export class Product {
 
   @Field()
   @Property({ required: true })
-  name: string;
+  name!: string;
+
+  @Field({ nullable: true })
+  @Property()
+  description?: string;
 
   @Field()
-  @Property()
-  description: string;
-
-  @Field()
-  @Property()
-  images: string;
+  @Property({ required: true })
+  images!: string;
 
   @Field((type) => Int)
-  @Property({ default: 0 })
-  stock: number;
+  @Property({ required: true, default: 0 })
+  stock!: number;
 
   @Field((type) => Float)
-  @Property({ default: 0.0 })
-  price: number;
+  @Property({ required: true, default: 0.0 })
+  price!: number;
 
   @Field((type) => Int, { nullable: true })
   @Property({ default: 0 })
@@ -86,20 +86,17 @@ export class Product {
   status?: Status;
 
   @Field((type) => Condition)
-  @Property({ enum: Condition, required: true })
-  condition: Condition;
+  @Property({ enum: Condition, required: true, default: Condition.NEW })
+  condition!: Condition;
 
   @Field((type) => Category)
   @Property({ ref: () => Category, required: true })
-  category: Ref<Category>;
+  category!: Ref<Category>;
 
   @Field((type) => User)
   @Property({ ref: () => User, required: true })
-  owner: Ref<User>;
+  owner!: Ref<User>;
 
   @Field((type) => Date, { nullable: true })
   createdAt?: Date;
-
-  @Field((type) => Date, { nullable: true })
-  updatedAt?: Date;
 }

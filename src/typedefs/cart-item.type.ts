@@ -12,9 +12,9 @@ import { Product } from "@/models/products.model";
 export class CartItem {
   @Field(() => Product)
   @Property({ ref: Product, required: true })
-  product: Ref<Product>;
+  product!: Ref<Product>;
 
   @Field(() => Int)
   @Property({ required: true })
-  quantity: number;
+  quantity!: number;
 }
