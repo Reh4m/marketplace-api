@@ -40,7 +40,7 @@ registerEnumType(Roles, {
   },
 })
 export class User {
-  @Field((type) => Types.ObjectId)
+  @Field()
   readonly _id?: Types.ObjectId;
 
   @Field()

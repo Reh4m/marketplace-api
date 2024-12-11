@@ -26,14 +26,14 @@ registerEnumType(Status, {
   },
 })
 export class Sale {
-  @Field((type) => Types.ObjectId)
+  @Field()
   readonly _id?: Types.ObjectId;
 
   @Field((type) => Order)
   @Property({ ref: () => Order, required: true })
   order!: Ref<Order>;
 
-  @Field((type) => Date, { nullable: true })
+  @Field({ nullable: true })
   @Property({ default: new Date() })
   orderDate?: Date;
 

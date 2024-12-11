@@ -1,5 +1,6 @@
 import { ModelOptions, prop as Property, Ref } from "@typegoose/typegoose";
 import { Field, Int, ObjectType, registerEnumType } from "type-graphql";
+import { Types } from "mongoose";
 
 import { Category } from "@models/categories.model";
 import { User } from "@models/users.model";
@@ -24,6 +25,9 @@ registerEnumType(Status, {
 @ObjectType()
 export class Coupon {
   @Field()
+  readonly _id?: Types.ObjectId;
+
+  @Field()
   @Property({ required: true, unique: true })
   code!: string;
 
@@ -31,7 +35,7 @@ export class Coupon {
   @Property()
   description?: string;
 
-  @Field((type) => Date, { nullable: true })
+  @Field({ nullable: true })
   @Property()
   expirationDate?: Date;
 

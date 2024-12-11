@@ -9,7 +9,7 @@ import { Types } from "mongoose";
   },
 })
 export class Category {
-  @Field(() => Types.ObjectId)
+  @Field()
   readonly _id?: Types.ObjectId;
 
   @Field()

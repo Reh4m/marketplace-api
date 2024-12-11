@@ -54,7 +54,7 @@ registerEnumType(Condition, {
   },
 })
 export class Product {
-  @Field((type) => Types.ObjectId)
+  @Field()
   readonly _id?: Types.ObjectId;
 
   @Field()
@@ -97,6 +97,6 @@ export class Product {
   @Property({ ref: () => User, required: true })
   owner!: Ref<User>;
 
-  @Field((type) => Date, { nullable: true })
+  @Field({ nullable: true })
   createdAt?: Date;
 }

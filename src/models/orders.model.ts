@@ -13,14 +13,14 @@ import { Address } from "@typedefs/addresses.type";
   },
 })
 export class Order {
-  @Field((type) => Types.ObjectId)
+  @Field()
   readonly _id?: Types.ObjectId;
 
-  @Field((type) => Date, { nullable: true })
+  @Field({ nullable: true })
   @Property({ default: new Date() })
   orderDate?: Date;
 
-  @Field((type) => Date, { nullable: true })
+  @Field({ nullable: true })
   @Property()
   shippedDate?: Date;
 
