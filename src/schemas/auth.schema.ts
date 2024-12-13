@@ -17,7 +17,7 @@ export class SignUpInput {
   @Field()
   @IsNotEmpty()
   @MinLength(6)
-  @MaxLength(32)
+  @MaxLength(128)
   password: string;
 }
 
@@ -30,6 +30,6 @@ export class LogInInput {
   @Field()
   @IsNotEmpty()
   @MinLength(6)
-  @MaxLength(32)
+  @MaxLength(128)
   password: string;
 }

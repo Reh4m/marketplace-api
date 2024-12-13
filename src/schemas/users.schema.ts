@@ -29,7 +29,7 @@ export class CreateUserInput {
   @Field()
   @IsNotEmpty()
   @MinLength(6)
-  @MaxLength(32)
+  @MaxLength(128)
   password: string;
 }
 
@@ -49,7 +49,7 @@ export class UpdateUserInput implements Partial<User> {
   @Field({ nullable: true })
   @IsNotEmpty()
   @MinLength(6)
-  @MaxLength(32)
+  @MaxLength(128)
   password?: string;
 
   @Field(() => [CartItemInput], { nullable: true })
