@@ -24,6 +24,7 @@
       "@config": ["config"],
       "@database": ["database"],
       "@graphql/*": ["graphql/*"],
+      "@helpers/*": ["helpers/*"],
       "@interfaces/*": ["interfaces/*"],
       "@middlewares/*": ["middlewares/*"],
       "@models/*": ["models/*"],
@@ -33,7 +34,7 @@
       "@schemas/*": ["schemas/*"],
       "@services/*": ["services/*"],
       "@typedefs/*": ["typedefs/*"],
-      "@utils/*": ["utils/*"]
+      "@utils": ["utils"]
     }
   },
   "module": {
