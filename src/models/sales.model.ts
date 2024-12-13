@@ -29,7 +29,7 @@ export class Sale {
   @Field()
   readonly _id?: Types.ObjectId;
 
-  @Field((type) => Order)
+  @Field((_type) => Order)
   @Property({ ref: () => Order, required: true })
   order!: Ref<Order>;
 
@@ -37,23 +37,23 @@ export class Sale {
   @Property({ default: new Date() })
   orderDate?: Date;
 
-  @Field((type) => [OrderDetails])
+  @Field((_type) => [OrderDetails])
   @Property({ required: true })
   details!: OrderDetails[];
 
-  @Field((type) => User)
+  @Field((_type) => User)
   @Property({ ref: () => User, required: true })
   customer!: Ref<User>;
 
-  @Field((type) => Address)
+  @Field((_type) => Address)
   @Property({ required: true })
   shipAddress!: Address;
 
-  @Field((type) => Status, { nullable: true })
+  @Field((_type) => Status, { nullable: true })
   @Property({ enum: Status, default: Status.PENDING })
   status?: Status;
 
-  @Field((type) => User)
+  @Field((_type) => User)
   @Property({ ref: () => User, required: true })
   owner!: Ref<User>;
 }

@@ -24,15 +24,15 @@ export class Order {
   @Property()
   shippedDate?: Date;
 
-  @Field((type) => User)
+  @Field((_type) => User)
   @Property({ ref: () => User, required: true })
   owner!: Ref<User>;
 
-  @Field((type) => Address)
+  @Field((_type) => Address)
   @Property({ required: true })
   shipAddress!: Address;
 
-  @Field((type) => [OrderDetails])
+  @Field((_type) => [OrderDetails])
   @Property({ required: true })
   details!: OrderDetails[];
 
@@ -40,7 +40,7 @@ export class Order {
   @Property()
   coupon?: string;
 
-  @Field((type) => Int, { nullable: true })
+  @Field((_type) => Int, { nullable: true })
   @Property()
   couponDiscount?: number;
 }

@@ -8,6 +8,6 @@ export class SupplierAndProducts {
   @Field()
   supplierId: Types.ObjectId;
 
-  @Field((type) => [OrderDetails])
+  @Field((_type) => [OrderDetails])
   details: OrderDetails[];
 }

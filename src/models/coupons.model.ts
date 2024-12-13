@@ -39,23 +39,23 @@ export class Coupon {
   @Property()
   expirationDate?: Date;
 
-  @Field((type) => Int, { nullable: true })
+  @Field((_type) => Int, { nullable: true })
   @Property({ default: 0 })
   limit?: number;
 
-  @Field((type) => Int)
+  @Field((_type) => Int)
   @Property({ required: true })
   discount!: number;
 
-  @Field((type) => Status, { nullable: true })
+  @Field((_type) => Status, { nullable: true })
   @Property({ enum: Status, default: Status.ACTIVE })
   status?: Status;
 
-  @Field((type) => [Category], { nullable: true })
+  @Field((_type) => [Category], { nullable: true })
   @Property({ ref: Category, default: null })
   validCategories?: Ref<Category>[];
 
-  @Field((type) => [Category], { nullable: true })
+  @Field((_type) => [Category], { nullable: true })
   @Property({ ref: Category, default: null })
   invalidCategories?: Ref<Category>[];
 
@@ -67,7 +67,7 @@ export class Coupon {
   @Property({ default: false })
   onlyForOwnerProducts?: boolean;
 
-  @Field((type) => User)
+  @Field((_type) => User)
   @Property({ ref: () => User, required: true })
   owner!: Ref<User>;
 }

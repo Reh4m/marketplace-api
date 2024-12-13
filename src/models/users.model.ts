@@ -63,15 +63,15 @@ export class User {
   @Property()
   phone?: string;
 
-  @Field((type) => [Address], { nullable: true })
-  @Property({ type: () => Address })
+  @Field((_type) => [Address], { nullable: true })
+  @Property({ type: () => Address, default: [] })
   addresses?: Address[];
 
-  @Field(() => [CartItem], { nullable: true })
+  @Field((_type) => [CartItem], { nullable: true })
   @Property({ type: () => CartItem, default: [] })
   cart?: CartItem[];
 
-  @Field((type) => Roles, { nullable: true })
+  @Field((_type) => Roles, { nullable: true })
   @Property({ enum: Roles, default: Roles.USER })
   role?: Roles;
 }

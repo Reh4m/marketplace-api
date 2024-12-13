@@ -69,31 +69,31 @@ export class Product {
   @Property({ required: true })
   images!: string;
 
-  @Field((type) => Int)
+  @Field((_type) => Int)
   @Property({ required: true, default: 0 })
   stock!: number;
 
-  @Field((type) => Float)
+  @Field((_type) => Float)
   @Property({ required: true, default: 0.0 })
   price!: number;
 
-  @Field((type) => Int, { nullable: true })
+  @Field((_type) => Int, { nullable: true })
   @Property({ default: 0 })
   discount?: number;
 
-  @Field((type) => Status, { nullable: true })
+  @Field((_type) => Status, { nullable: true })
   @Property({ enum: Status, default: Status.AVAILABLE })
   status?: Status;
 
-  @Field((type) => Condition)
+  @Field((_type) => Condition)
   @Property({ enum: Condition, required: true, default: Condition.NEW })
   condition!: Condition;
 
-  @Field((type) => Category)
+  @Field((_type) => Category)
   @Property({ ref: () => Category, required: true })
   category!: Ref<Category>;
 
-  @Field((type) => User)
+  @Field((_type) => User)
   @Property({ ref: () => User, required: true })
   owner!: Ref<User>;
 

@@ -4,7 +4,7 @@ import { Product } from "@models/products.model";
 
 @ObjectType()
 export class InfiniteScrollProducts {
-  @Field((type) => [Product])
+  @Field((_type) => [Product])
   products: Product[];
 
   @Field()

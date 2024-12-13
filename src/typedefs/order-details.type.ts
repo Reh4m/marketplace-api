@@ -10,19 +10,19 @@ import { Product } from "@models/products.model";
   },
 })
 export class OrderDetails {
-  @Field((type) => Product)
+  @Field((_type) => Product)
   @Property({ required: true })
   product!: Product;
 
-  @Field((type) => Float)
+  @Field((_type) => Float)
   @Property({ required: true })
   unitPrice!: number;
 
-  @Field((type) => Int)
+  @Field((_type) => Int)
   @Property({ required: true })
   quantity!: number;
 
-  @Field((type) => Int, { nullable: true })
+  @Field((_type) => Int, { nullable: true })
   @Property()
   discount?: number;
 }

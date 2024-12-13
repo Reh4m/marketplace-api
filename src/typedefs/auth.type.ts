@@ -5,7 +5,7 @@ import { User } from "@models/users.model";
 
 @ObjectType()
 export class DataStoredInToken {
-  @Field((type) => Types.ObjectId)
+  @Field((_type) => Types.ObjectId)
   _id: Types.ObjectId;
 }
 
@@ -14,13 +14,13 @@ export class TokenData {
   @Field()
   token: string;
 
-  @Field((type) => Int)
+  @Field((_type) => Int)
   expiresIn: number;
 }
 
 @ObjectType()
 export class TokenWithUser {
-  @Field((type) => User)
+  @Field((_type) => User)
   user: User;
 
   @Field()
@@ -29,6 +29,6 @@ export class TokenWithUser {
 
 @ObjectType()
 export class RequestWithUser {
-  @Field((type) => User, { nullable: true })
+  @Field((_type) => User, { nullable: true })
   user?: User;
 }
