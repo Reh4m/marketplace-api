@@ -15,6 +15,7 @@ import { DateScalar } from "@graphql/scalars/DateScalar";
 import { ObjectIdScalar } from "@graphql/scalars/ObjectIdScalar";
 import { resolvers } from "@resolvers";
 import { User } from "@models/users.model";
+import Container from "typedi";
 
 export class Server {
   private server: ApolloServer;
@@ -66,7 +67,10 @@ export class Server {
         { type: Types.ObjectId, scalar: ObjectIdScalar },
         { type: Date, scalar: DateScalar },
       ],
-      validate: true, // Enable 'class-validation' integration
+      // Enable 'class-validation' integration
+      validate: true,
+      // Registry 3rd party IOC container
+      container: Container,
     });
   }
 
