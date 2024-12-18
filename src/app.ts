@@ -11,8 +11,8 @@ import {
   AuthCheckerMiddleware,
   AuthMiddleware,
 } from "@middlewares/authentication.middleware";
-import { DateScalar } from "@graphql/scalars/DateScalar";
-import { ObjectIdScalar } from "@graphql/scalars/ObjectIdScalar";
+import { DateScalar } from "@scalars/DateScalar";
+import { ObjectIdScalar } from "@scalars/ObjectIdScalar";
 import { resolvers } from "@resolvers";
 import { User } from "@models/users.model";
 import Container from "typedi";
