@@ -1,6 +1,7 @@
-import { hash, compare } from "bcrypt";
+import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { Types } from "mongoose";
+import { Inject, Service } from "typedi";
 
 import { SECRET_KEY } from "@config";
 import {
@@ -11,6 +12,7 @@ import {
 import { UserModel } from "@models";
 import { User } from "@models/users.model";
 import { LogInInput, SignUpInput } from "@schemas/auth.schema";
+import { UserService } from "@services/users/users.service";
 
 const createToken = (user: User): TokenData => {
   const dataStoredInToken: DataStoredInToken = { _id: user._id };
@@ -22,26 +24,15 @@ const createToken = (user: User): TokenData => {
   };
 };
 
+@Service()
 export class AuthService {
+  constructor(
+    @Inject()
+    private readonly userService: UserService
+  ) {}
+
   public async userSignUp(userData: SignUpInput): Promise<TokenWithUser> {
-    const findUser: User = await UserModel.findOne({
-      $or: [{ username: userData.username }, { email: userData.email }],
-    });
-
-    if (findUser) {
-      if (findUser.username === userData.username)
-        throw new Error(`This username ${userData.username} already exists`);
-
-      if (findUser.email === userData.email)
-        throw new Error(`This email ${userData.email} already exists`);
-    }
-
-    const hashedPassword = await hash(userData.password, 10);
-
-    const newUser: User = await UserModel.create({
-      ...userData,
-      password: hashedPassword,
-    });
+    const newUser: User = await this.userService.createUser(userData);
 
     const tokenData = createToken(newUser);
 
@@ -60,8 +51,7 @@ export class AuthService {
       findUser.password
     );
 
-    if (!isPasswordMatching)
-      throw new Error("Your email or password do not match");
+    if (!isPasswordMatching) throw new Error("Your password do not match");
 
     const tokenData = createToken(findUser);
 
