@@ -1,18 +1,24 @@
 import { Authorized, Arg, Ctx, Mutation, Resolver } from "type-graphql";
-import { Types } from "mongoose";
+import { Inject, Service } from "typedi";
 
 import { AuthService } from "@services/auth.service";
 import { User } from "@models/users.model";
 import { SignUpInput, LogInInput } from "@schemas/auth.schema";
 import { TokenWithUser } from "@typedefs/auth.type";
 
-@Resolver()
-export class AuthResolver extends AuthService {
+@Service()
+@Resolver((_of) => TokenWithUser)
+export class AuthResolver {
+  constructor(
+    @Inject()
+    private readonly authService: AuthService
+  ) {}
+
   @Mutation(() => TokenWithUser)
   public async signUp(
     @Arg("userData") userData: SignUpInput
   ): Promise<TokenWithUser> {
-    const { user, token } = await this.userSignUp(userData);
+    const { user, token } = await this.authService.userSignUp(userData);
 
     return { user, token };
   }
@@ -21,15 +27,15 @@ export class AuthResolver extends AuthService {
   public async logIn(
     @Arg("userData") userData: LogInInput
   ): Promise<TokenWithUser> {
-    const { user, token } = await this.userLogin(userData);
+    const { user, token } = await this.authService.userLogin(userData);
 
     return { user, token };
   }
 
   @Authorized()
   @Mutation(() => User)
-  public async logout(@Ctx("user") userId: Types.ObjectId): Promise<User> {
-    const user = await this.userLogOut(userId);
+  public async logout(@Ctx("user") { _id }: User): Promise<User> {
+    const user = await this.authService.userLogOut(_id);
 
     return user;
   }
