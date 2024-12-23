@@ -1,8 +1,9 @@
+import { User } from "@/models/users.model";
 import { IsEmail, IsNotEmpty, MaxLength, MinLength } from "class-validator";
 import { Field, InputType } from "type-graphql";
 
 @InputType()
-export class SignUpInput {
+export class SignUpInput implements Partial<User> {
   @Field()
   @MaxLength(32)
   username: string;
@@ -22,7 +23,7 @@ export class SignUpInput {
 }
 
 @InputType()
-export class LogInInput {
+export class LogInInput implements Partial<User> {
   @Field()
   @MaxLength(32)
   username: string;
