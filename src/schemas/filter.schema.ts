@@ -12,7 +12,7 @@ import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { Condition } from "@models/products.model";
 
 @ObjectType()
-class PriceFilter {
+class ProductsFilterByPrice {
   @Field(() => Int)
   min: number;
 
@@ -21,7 +21,7 @@ class PriceFilter {
 }
 
 @InputType()
-class PriceFilterInput {
+class FilterProductsByPriceInput {
   @Field(() => Int)
   @IsNumber()
   @Min(0)
@@ -34,16 +34,16 @@ class PriceFilterInput {
 }
 
 @InputType()
-export class FilterInput {
-  @Field(() => String, { nullable: true })
+export class FilterProductsInput {
+  @Field({ nullable: true })
   @IsNotEmpty()
   category?: Types.ObjectId;
 
-  @Field(() => PriceFilterInput, { nullable: true })
+  @Field(() => FilterProductsByPriceInput, { nullable: true })
   @IsNotEmpty()
   @IsNotEmptyObject()
-  @Type(() => PriceFilterInput)
-  priceRange?: PriceFilter;
+  @Type(() => FilterProductsByPriceInput)
+  priceRange?: ProductsFilterByPrice;
 
   @Field(() => [Condition], { nullable: true })
   @IsNotEmpty()
