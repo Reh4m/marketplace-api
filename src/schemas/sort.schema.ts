@@ -1,11 +1,11 @@
 import { IsNotEmpty } from "class-validator";
-import { Field, InputType } from "type-graphql";
+import { ArgsType, Field } from "type-graphql";
 
 import { SortOrderScalar } from "@scalars/SortOrderScalar";
 
-@InputType()
-export class SortInput {
-  @Field(() => String)
+@ArgsType()
+export class SortProductsArgs {
+  @Field()
   @IsNotEmpty()
   by: string;
 
