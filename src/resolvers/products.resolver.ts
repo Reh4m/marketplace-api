@@ -1,5 +1,6 @@
 import {
   Arg,
+  Args,
   Authorized,
   Int,
   MiddlewareFn,
@@ -17,8 +18,7 @@ import {
   CreateProductInput,
   UpdateProductInput,
 } from "@schemas/products.schema";
-import { SortInput } from "@schemas/sort.schema";
-import { FilterInput } from "@schemas/filter.schema";
+import { GetProductsArgs } from "@schemas/pagination.schema";
 import { RequestWithUser } from "@typedefs/auth.type";
 import { InfiniteScrollProducts } from "@typedefs/products.type";
 
@@ -42,17 +42,9 @@ const IsOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
 export class ProductResolver extends ProductService {
   @Query(() => InfiniteScrollProducts)
   public async getProducts(
-    @Arg("pageNum", () => Int) pageNum: number,
-    @Arg("pageSize", () => Int) pageSize: number,
-    @Arg("sort") sort: SortInput,
-    @Arg("filter", { nullable: true }) filter?: FilterInput
+    @Args() options: GetProductsArgs
   ): Promise<InfiniteScrollProducts> {
-    const { products, hasMore } = await this.findAllProducts(
-      pageNum,
-      pageSize,
-      sort,
-      filter
-    );
+    const { products, hasMore } = await this.findAllProducts(options);
 
     return { products, hasMore };
   }
