@@ -27,4 +27,9 @@ export class GetProductsArgs {
   @ValidateNested()
   @Type(() => FilterProductsInput)
   filter?: FilterProductsInput;
+
+  // Helpers
+  get skips(): number {
+    return this.skip * this.take;
+  }
 }
