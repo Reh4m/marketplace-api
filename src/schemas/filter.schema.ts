@@ -13,21 +13,21 @@ import { Condition } from "@models/products.model";
 
 @ObjectType()
 class ProductsFilterByPrice {
-  @Field(() => Int)
+  @Field((_type) => Int)
   min: number;
 
-  @Field(() => Int)
+  @Field((_type) => Int)
   max: number;
 }
 
 @InputType()
 class FilterProductsByPriceInput {
-  @Field(() => Int)
+  @Field((_type) => Int)
   @IsNumber()
   @Min(0)
   min: number;
 
-  @Field(() => Int)
+  @Field((_type) => Int)
   @IsNumber()
   @Min(0)
   max: number;
@@ -39,13 +39,13 @@ export class FilterProductsInput {
   @IsNotEmpty()
   category?: Types.ObjectId;
 
-  @Field(() => FilterProductsByPriceInput, { nullable: true })
+  @Field((_type) => FilterProductsByPriceInput, { nullable: true })
   @IsNotEmpty()
   @IsNotEmptyObject()
   @Type(() => FilterProductsByPriceInput)
   priceRange?: ProductsFilterByPrice;
 
-  @Field(() => [Condition], { nullable: true })
+  @Field((_type) => [Condition], { nullable: true })
   @IsNotEmpty()
   @IsArray()
   condition?: Condition[];
