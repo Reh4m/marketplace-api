@@ -21,7 +21,11 @@ import {
 import { GetProductsArgs } from "@schemas/pagination.schema";
 import { RequestWithUser } from "@typedefs/auth.type";
 import { InfiniteScrollProducts } from "@typedefs/products.type";
+import { compareObjectIds } from "@utils";
 
+/**
+ * Checks if the current user is the owner of the product to be modified.
+ */
 const IsOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
   { context, info },
   next
@@ -31,7 +35,7 @@ const IsOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
 
   const product: Product = await ProductModel.findById(productId);
 
-  if (product.owner._id.toString() !== userId.toString()) {
+  if (compareObjectIds(product.owner._id, userId)) {
     throw new Error("Not authorized");
   }
 
