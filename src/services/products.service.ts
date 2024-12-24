@@ -5,22 +5,22 @@ import {
   CreateProductInput,
   UpdateProductInput,
 } from "@schemas/products.schema";
+import { GetProductsArgs } from "@schemas/pagination.schema";
 import { CategoryModel, ProductModel, UserModel } from "@models";
 import { Product } from "@models/products.model";
 import { Category } from "@models/categories.model";
 import { User } from "@models/users.model";
 import { InfiniteScrollProducts } from "@typedefs/products.type";
-import { SortInput } from "@schemas/sort.schema";
-import { FilterInput } from "@schemas/filter.schema";
 
 @Service()
 export class ProductService {
-  public async findAllProducts(
-    pageNum: number,
-    pageSize: number,
-    sort: SortInput,
-    filter?: FilterInput
-  ): Promise<InfiniteScrollProducts> {
+  public async findAllProducts({
+    take,
+    skip,
+    sort,
+    filter,
+    skips,
+  }: GetProductsArgs): Promise<InfiniteScrollProducts> {
     let products: Product[];
 
     const query: FilterQuery<Product> = {};
@@ -40,7 +40,7 @@ export class ProductService {
       }
     }
 
-    if (pageNum === 1) {
+    if (skip === 0) {
       products = await ProductModel.find(query)
         .populate({
           path: "owner",
@@ -51,10 +51,8 @@ export class ProductService {
           model: "Category",
         })
         .sort({ [sort.by as string]: sort.order as any })
-        .limit(pageSize);
+        .limit(take);
     } else {
-      const skips = pageSize * (pageNum - 1);
-
       products = await ProductModel.find(query)
         .populate({
           path: "owner",
@@ -66,11 +64,11 @@ export class ProductService {
         })
         .sort({ [sort.by as string]: sort.order as any })
         .skip(skips)
-        .limit(pageSize);
+        .limit(take);
     }
 
     const totalDocs = await ProductModel.countDocuments();
-    const hasMore = totalDocs > pageSize * pageNum;
+    const hasMore = totalDocs > skips;
 
     return { products, hasMore };
   }
