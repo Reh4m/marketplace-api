@@ -7,7 +7,7 @@ import { FilterProductsInput } from "./filter.schema";
 
 @ArgsType()
 export class GetProductsArgs {
-  @Field((_type) => Int)
+  @Field((_type) => Int, { defaultValue: 0 })
   @IsNumber()
   @Min(0)
   skip: number;
