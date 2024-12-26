@@ -43,7 +43,7 @@ const IsOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
 };
 
 @Service()
-@Resolver()
+@Resolver((_of) => Product)
 export class ProductResolver {
   constructor(
     @Inject()
