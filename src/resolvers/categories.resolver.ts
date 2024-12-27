@@ -1,5 +1,6 @@
 import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { Types } from "mongoose";
+import { Inject, Service } from "typedi";
 
 import { CategoryService } from "@services/categories.service";
 import { Category } from "@models/categories.model";
@@ -8,11 +9,18 @@ import {
   UpdateCategoryInput,
 } from "@schemas/categories.schema";
 
-@Resolver()
-export class CategoryResolver extends CategoryService {
+@Service()
+@Resolver((_of) => Category)
+export class CategoryResolver {
+  constructor(
+    @Inject()
+    private readonly categoryService: CategoryService
+  ) {}
+
   @Query(() => [Category])
   public async getCategories(): Promise<Category[]> {
-    const categories: Category[] = await this.findAllCategories();
+    const categories: Category[] =
+      await this.categoryService.findAllCategories();
 
     return categories;
   }
@@ -21,7 +29,9 @@ export class CategoryResolver extends CategoryService {
   public async getCategoryById(
     @Arg("categoryId") categoryId: Types.ObjectId
   ): Promise<Category> {
-    const category: Category = await this.findCategoryById(categoryId);
+    const category: Category = await this.categoryService.findCategoryById(
+      categoryId
+    );
 
     return category;
   }
@@ -30,7 +40,9 @@ export class CategoryResolver extends CategoryService {
   public async getCategoryByName(
     @Arg("categoryName") categoryName: string
   ): Promise<Category> {
-    const category: Category = await this.findCategoryByName(categoryName);
+    const category: Category = await this.categoryService.findCategoryByName(
+      categoryName
+    );
 
     return category;
   }
@@ -40,7 +52,9 @@ export class CategoryResolver extends CategoryService {
   public async createCategory(
     @Arg("categoryData") categoryData: CreateCategoryInput
   ): Promise<Category> {
-    const category: Category = await this.createNewCategory(categoryData);
+    const category: Category = await this.categoryService.createNewCategory(
+      categoryData
+    );
 
     return category;
   }
@@ -51,7 +65,7 @@ export class CategoryResolver extends CategoryService {
     @Arg("categoryId") categoryId: Types.ObjectId,
     @Arg("categoryData") categoryData: UpdateCategoryInput
   ): Promise<Category> {
-    const category: Category = await this.updateOneCategory(
+    const category: Category = await this.categoryService.updateOneCategory(
       categoryId,
       categoryData
     );
@@ -64,7 +78,9 @@ export class CategoryResolver extends CategoryService {
   public async deleteCategory(
     @Arg("categoryId") categoryId: Types.ObjectId
   ): Promise<Category> {
-    const category: Category = await this.deleteOneCategory(categoryId);
+    const category: Category = await this.categoryService.deleteOneCategory(
+      categoryId
+    );
 
     return category;
   }
