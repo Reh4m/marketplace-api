@@ -18,6 +18,10 @@ export class CouponService {
   public async findCouponByCode(code: string): Promise<Coupon> {
     const coupon: Coupon = await CouponModel.findOne({ code });
 
+    if (!coupon) {
+      throw new Error(`Coupon code ${code} doesn't exist`);
+    }
+
     return coupon;
   }
 
@@ -36,9 +40,7 @@ export class CouponService {
       throw new Error("Owner not found");
     }
 
-    const newCoupon: Coupon = await CouponModel.create({
-      ...couponData,
-    });
+    const newCoupon: Coupon = await CouponModel.create(couponData);
 
     return newCoupon;
   }
