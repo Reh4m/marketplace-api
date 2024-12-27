@@ -8,6 +8,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { Types } from "mongoose";
+import { Inject, Service } from "typedi";
 
 import { OrderService } from "@services/orders.service";
 import { OrderModel } from "@models";
@@ -45,15 +46,21 @@ const isOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
   return next();
 };
 
-@Resolver()
-export class OrderResolver extends OrderService {
+@Service()
+@Resolver((_of) => Order)
+export class OrderResolver {
+  constructor(
+    @Inject()
+    private readonly orderService: OrderService
+  ) {}
+
   @Authorized()
   @UseMiddleware(allowToReadMiddleware)
   @Query(() => [Order])
   public async getUserOrders(
     @Arg("userId") userId: Types.ObjectId
   ): Promise<Order[]> {
-    const orders: Order[] = await this.findUserOrders(userId);
+    const orders: Order[] = await this.orderService.findUserOrders(userId);
 
     return orders;
   }
@@ -64,7 +71,7 @@ export class OrderResolver extends OrderService {
   public async getOrderById(
     @Arg("orderId") orderId: Types.ObjectId
   ): Promise<Order> {
-    const order: Order = await this.findOrderById(orderId);
+    const order: Order = await this.orderService.findOrderById(orderId);
 
     return order;
   }
@@ -74,7 +81,7 @@ export class OrderResolver extends OrderService {
   public async createOrder(
     @Arg("orderData") orderData: CreateOrderInput
   ): Promise<Order> {
-    const order: Order = await this.createNewOrder(orderData);
+    const order: Order = await this.orderService.createNewOrder(orderData);
 
     return order;
   }
@@ -85,7 +92,7 @@ export class OrderResolver extends OrderService {
   public async deleteOrder(
     @Arg("orderId") orderId: Types.ObjectId
   ): Promise<Order> {
-    const order: Order = await this.deleteOneOrder(orderId);
+    const order: Order = await this.orderService.deleteOneOrder(orderId);
 
     return order;
   }
