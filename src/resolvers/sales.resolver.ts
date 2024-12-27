@@ -1,6 +1,7 @@
 import {
   Arg,
   Authorized,
+  Ctx,
   MiddlewareFn,
   Mutation,
   Query,
@@ -8,27 +9,14 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { Types } from "mongoose";
+import { Inject, Service } from "typedi";
 
 import { SaleService } from "@services/sales.service";
 import { SaleModel } from "@models";
 import { Sale } from "@models/sales.model";
+import { User } from "@models/users.model";
 import { CreateSaleInput, UpdateSaleStatusInput } from "@schemas/sales.schema";
 import { RequestWithUser } from "@typedefs/auth.type";
-import { Inject, Service } from "typedi";
-
-const allowToReadMiddleware: MiddlewareFn<RequestWithUser> = (
-  { context, info },
-  next
-) => {
-  const { _id: currentUserId } = context.user;
-  const userId = info.variableValues.userId as Types.ObjectId;
-
-  if (userId.toString() !== currentUserId.toString()) {
-    throw new Error("Not authorized");
-  }
-
-  return next();
-};
 
 const isOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
   { context, info },
@@ -55,10 +43,9 @@ export class SaleResolver {
   ) {}
 
   @Authorized()
-  @UseMiddleware(allowToReadMiddleware)
   @Query(() => [Sale])
   public async getUserSales(
-    @Arg("userId") userId: Types.ObjectId
+    @Ctx("user") { _id: userId }: User
   ): Promise<Sale[]> {
     const sales: Sale[] = await this.saleService.findUserSales(userId);
 
