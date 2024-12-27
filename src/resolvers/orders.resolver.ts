@@ -1,6 +1,7 @@
 import {
   Arg,
   Authorized,
+  Ctx,
   MiddlewareFn,
   Mutation,
   Query,
@@ -13,22 +14,9 @@ import { Inject, Service } from "typedi";
 import { OrderService } from "@services/orders.service";
 import { OrderModel } from "@models";
 import { Order } from "@models/orders.model";
+import { User } from "@models/users.model";
 import { CreateOrderInput } from "@schemas/orders.schema";
 import { RequestWithUser } from "@typedefs/auth.type";
-
-const allowToReadMiddleware: MiddlewareFn<RequestWithUser> = (
-  { context, info },
-  next
-) => {
-  const { _id: currentUserId } = context.user;
-  const userId = info.variableValues.userId as Types.ObjectId;
-
-  if (userId.toString() !== currentUserId.toString()) {
-    throw new Error("Not authorized");
-  }
-
-  return next();
-};
 
 const isOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
   { context, info },
@@ -55,10 +43,9 @@ export class OrderResolver {
   ) {}
 
   @Authorized()
-  @UseMiddleware(allowToReadMiddleware)
   @Query(() => [Order])
   public async getUserOrders(
-    @Arg("userId") userId: Types.ObjectId
+    @Ctx("user") { _id: userId }: User
   ): Promise<Order[]> {
     const orders: Order[] = await this.orderService.findUserOrders(userId);
 
@@ -66,7 +53,6 @@ export class OrderResolver {
   }
 
   @Authorized()
-  @UseMiddleware(allowToReadMiddleware)
   @Query(() => Order)
   public async getOrderById(
     @Arg("orderId") orderId: Types.ObjectId
