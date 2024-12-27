@@ -17,6 +17,7 @@ import { Sale } from "@models/sales.model";
 import { User } from "@models/users.model";
 import { CreateSaleInput, UpdateSaleStatusInput } from "@schemas/sales.schema";
 import { RequestWithUser } from "@typedefs/auth.type";
+import { compareObjectIds } from "@utils";
 
 const isOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
   { context, info },
@@ -27,7 +28,7 @@ const isOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
 
   const sale: Sale = await SaleModel.findById(saleId);
 
-  if (sale.owner._id.toString() !== userId.toString()) {
+  if (!compareObjectIds(sale.owner._id, userId)) {
     throw new Error("Not authorized");
   }
 
@@ -53,7 +54,7 @@ export class SaleResolver {
   }
 
   @Authorized()
-  // @UseMiddleware(allowToReadMiddleware)
+  @UseMiddleware(isOwnerMiddleware)
   @Query(() => Sale)
   public async getSaleById(
     @Arg("saleId") saleId: Types.ObjectId
