@@ -35,7 +35,7 @@ const IsOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
 
   const product: Product = await ProductModel.findById(productId);
 
-  if (compareObjectIds(product.owner._id, userId)) {
+  if (!compareObjectIds(product.owner._id, userId)) {
     throw new Error("Not authorized");
   }
 

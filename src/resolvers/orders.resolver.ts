@@ -17,6 +17,7 @@ import { Order } from "@models/orders.model";
 import { User } from "@models/users.model";
 import { CreateOrderInput } from "@schemas/orders.schema";
 import { RequestWithUser } from "@typedefs/auth.type";
+import { compareObjectIds } from "@utils";
 
 const isOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
   { context, info },
@@ -27,7 +28,7 @@ const isOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
 
   const order: Order = await OrderModel.findById(orderId);
 
-  if (order.owner._id.toString() !== userId.toString()) {
+  if (!compareObjectIds(order.owner._id, userId)) {
     throw new Error("Not authorized");
   }
 
@@ -53,6 +54,7 @@ export class OrderResolver {
   }
 
   @Authorized()
+  @UseMiddleware(isOwnerMiddleware)
   @Query(() => Order)
   public async getOrderById(
     @Arg("orderId") orderId: Types.ObjectId
