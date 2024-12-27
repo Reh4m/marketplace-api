@@ -4,19 +4,26 @@ import { Types } from "mongoose";
 import { CouponService } from "@services/coupons.service";
 import { Coupon } from "@models/coupons.model";
 import { CreateCouponInput, UpdateCouponInput } from "@schemas/coupons.schema";
+import { Inject, Service } from "typedi";
 
-@Resolver()
-export class CouponResolver extends CouponService {
+@Service()
+@Resolver((_of) => Coupon)
+export class CouponResolver {
+  constructor(
+    @Inject()
+    private readonly couponService: CouponService
+  ) {}
+
   @Query(() => [Coupon])
   public async getCoupons(): Promise<Coupon[]> {
-    const coupons: Coupon[] = await this.findAllCoupons();
+    const coupons: Coupon[] = await this.couponService.findAllCoupons();
 
     return coupons;
   }
 
   @Query(() => Coupon)
   public async getCouponByCode(@Arg("code") code: string): Promise<Coupon> {
-    const coupon: Coupon = await this.findCouponByCode(code);
+    const coupon: Coupon = await this.couponService.findCouponByCode(code);
 
     return coupon;
   }
@@ -26,7 +33,7 @@ export class CouponResolver extends CouponService {
   public async createCoupon(
     @Arg("couponData") couponData: CreateCouponInput
   ): Promise<Coupon> {
-    const coupon: Coupon = await this.createNewCoupon(couponData);
+    const coupon: Coupon = await this.couponService.createNewCoupon(couponData);
 
     return coupon;
   }
@@ -36,7 +43,9 @@ export class CouponResolver extends CouponService {
   public async validateCoupon(
     @Arg("couponCode") couponCode: string
   ): Promise<Coupon> {
-    const coupon: Coupon = await this.validateOneCoupon(couponCode);
+    const coupon: Coupon = await this.couponService.validateOneCoupon(
+      couponCode
+    );
 
     return coupon;
   }
@@ -47,7 +56,10 @@ export class CouponResolver extends CouponService {
     @Arg("couponId") couponId: Types.ObjectId,
     @Arg("couponData") couponData: UpdateCouponInput
   ): Promise<Coupon> {
-    const coupon: Coupon = await this.updateOneCoupon(couponId, couponData);
+    const coupon: Coupon = await this.couponService.updateOneCoupon(
+      couponId,
+      couponData
+    );
 
     return coupon;
   }
@@ -57,7 +69,7 @@ export class CouponResolver extends CouponService {
   public async deleteCoupon(
     @Arg("couponId") couponId: Types.ObjectId
   ): Promise<Coupon> {
-    const coupon: Coupon = await this.deleteOneCoupon(couponId);
+    const coupon: Coupon = await this.couponService.deleteOneCoupon(couponId);
 
     return coupon;
   }
