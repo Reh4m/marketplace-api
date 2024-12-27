@@ -14,6 +14,7 @@ import { SaleModel } from "@models";
 import { Sale } from "@models/sales.model";
 import { CreateSaleInput, UpdateSaleStatusInput } from "@schemas/sales.schema";
 import { RequestWithUser } from "@typedefs/auth.type";
+import { Inject, Service } from "typedi";
 
 const allowToReadMiddleware: MiddlewareFn<RequestWithUser> = (
   { context, info },
@@ -45,15 +46,21 @@ const isOwnerMiddleware: MiddlewareFn<RequestWithUser> = async (
   return next();
 };
 
-@Resolver()
-export class SaleResolver extends SaleService {
+@Service()
+@Resolver((_of) => Sale)
+export class SaleResolver {
+  constructor(
+    @Inject()
+    private readonly saleService: SaleService
+  ) {}
+
   @Authorized()
   @UseMiddleware(allowToReadMiddleware)
   @Query(() => [Sale])
   public async getUserSales(
     @Arg("userId") userId: Types.ObjectId
   ): Promise<Sale[]> {
-    const sales: Sale[] = await this.findUserSales(userId);
+    const sales: Sale[] = await this.saleService.findUserSales(userId);
 
     return sales;
   }
@@ -64,7 +71,7 @@ export class SaleResolver extends SaleService {
   public async getSaleById(
     @Arg("saleId") saleId: Types.ObjectId
   ): Promise<Sale> {
-    const sale: Sale = await this.findSaleById(saleId);
+    const sale: Sale = await this.saleService.findSaleById(saleId);
 
     return sale;
   }
@@ -74,7 +81,7 @@ export class SaleResolver extends SaleService {
   public async createSale(
     @Arg("saleData") saleData: CreateSaleInput
   ): Promise<Sale> {
-    const sale: Sale = await this.createNewSale(saleData);
+    const sale: Sale = await this.saleService.createNewSale(saleData);
 
     return sale;
   }
@@ -86,7 +93,7 @@ export class SaleResolver extends SaleService {
     @Arg("saleId") saleId: Types.ObjectId,
     @Arg("status") status: UpdateSaleStatusInput
   ): Promise<Sale> {
-    const sale: Sale = await this.updateSaleStatus(saleId, status);
+    const sale: Sale = await this.saleService.updateSaleStatus(saleId, status);
 
     return sale;
   }
@@ -97,7 +104,7 @@ export class SaleResolver extends SaleService {
   public async deleteSale(
     @Arg("saleId") saleId: Types.ObjectId
   ): Promise<Sale> {
-    const sale: Sale = await this.deleteOneSale(saleId);
+    const sale: Sale = await this.saleService.deleteOneSale(saleId);
 
     return sale;
   }
