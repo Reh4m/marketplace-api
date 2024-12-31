@@ -20,6 +20,7 @@ export class ProductService {
     sort,
     filter,
     skips,
+    totalItemsToSkip,
   }: GetProductsArgs): Promise<InfiniteScrollProducts> {
     let products: Product[];
 
@@ -69,8 +70,8 @@ export class ProductService {
         .limit(take);
     }
 
-    const totalDocs = await ProductModel.countDocuments();
-    const hasMore = totalDocs > skips;
+    const totalDocs = await ProductModel.find(query).countDocuments();
+    const hasMore = totalDocs > totalItemsToSkip;
 
     return { products, hasMore };
   }

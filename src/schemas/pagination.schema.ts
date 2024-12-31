@@ -32,4 +32,8 @@ export class GetProductsArgs {
   get skips(): number {
     return this.skip * this.take;
   }
+
+  get totalItemsToSkip(): number {
+    return this.take * (this.skip + 1);
+  }
 }
