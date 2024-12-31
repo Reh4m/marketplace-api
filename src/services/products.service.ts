@@ -11,13 +11,11 @@ import { Product, Status } from "@models/products.model";
 import { Category } from "@models/categories.model";
 import { User } from "@models/users.model";
 import { InfiniteScrollProducts } from "@typedefs/products.type";
-import { SortBy, SortOrder } from "@/schemas/sort.schema";
 
 @Service()
 export class ProductService {
   public async findAllProducts({
     take,
-    skip,
     sort,
     filter,
     skips,
@@ -44,32 +42,18 @@ export class ProductService {
       }
     }
 
-    if (skip === 0) {
-      products = await ProductModel.find(query)
-        .populate({
-          path: "owner",
-          model: "User",
-        })
-        .populate({
-          path: "category",
-          model: "Category",
-        })
-        .sort({ [sort.by]: sort.order })
-        .limit(take);
-    } else {
-      products = await ProductModel.find(query)
-        .populate({
-          path: "owner",
-          model: "User",
-        })
-        .populate({
-          path: "category",
-          model: "Category",
-        })
-        .sort({ [sort.by]: sort.order })
-        .skip(skips)
-        .limit(take);
-    }
+    products = await ProductModel.find(query)
+      .populate({
+        path: "owner",
+        model: "User",
+      })
+      .populate({
+        path: "category",
+        model: "Category",
+      })
+      .sort({ [sort.by]: sort.order })
+      .skip(skips)
+      .limit(take);
 
     const totalDocs = await ProductModel.find(query).countDocuments();
     const hasMore = totalDocs > totalItemsToSkip;
@@ -78,7 +62,7 @@ export class ProductService {
   }
 
   public async findProductById(productId: Types.ObjectId): Promise<Product> {
-    const product: Product = await ProductModel.findById(productId.toString())
+    const product: Product = await ProductModel.findById(productId)
       .populate({
         path: "owner",
         model: "User",
