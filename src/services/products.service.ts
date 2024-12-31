@@ -7,7 +7,7 @@ import {
 } from "@schemas/products.schema";
 import { GetProductsArgs } from "@schemas/pagination.schema";
 import { CategoryModel, ProductModel, UserModel } from "@models";
-import { Product } from "@models/products.model";
+import { Product, Status } from "@models/products.model";
 import { Category } from "@models/categories.model";
 import { User } from "@models/users.model";
 import { InfiniteScrollProducts } from "@typedefs/products.type";
@@ -24,6 +24,8 @@ export class ProductService {
     let products: Product[];
 
     const query: FilterQuery<Product> = {};
+
+    query.status = { $in: [Status.AVAILABLE, Status.ON_PROMOTION] };
 
     if (filter) {
       if (filter.priceRange) {
