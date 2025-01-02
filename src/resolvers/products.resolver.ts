@@ -74,12 +74,13 @@ export class ProductResolver {
 
   @Query(() => [Product])
   public async getProductsByCategory(
-    @Arg("categoryId") categoryId: Types.ObjectId
-  ): Promise<Product[]> {
-    const products: Product[] =
-      await this.productService.findProductsByCategory(categoryId);
+    @Arg("categoryId") categoryId: Types.ObjectId,
+    @Args() options: GetProductsArgs
+  ): Promise<InfiniteScrollProducts> {
+    const { products, hasMore } =
+      await this.productService.findProductsByCategory(categoryId, options);
 
-    return products;
+    return { products, hasMore };
   }
 
   @Query(() => [Product])

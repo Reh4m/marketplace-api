@@ -1,4 +1,4 @@
-import { FilterQuery, Types } from "mongoose";
+import { FilterQuery, QueryOptions, Types } from "mongoose";
 import { Service } from "typedi";
 
 import {
@@ -21,8 +21,6 @@ export class ProductService {
     skips,
     totalItemsToSkip,
   }: GetProductsArgs): Promise<InfiniteScrollProducts> {
-    let products: Product[];
-
     const query: FilterQuery<Product> = {};
 
     query.status = { $in: [Status.AVAILABLE, Status.ON_PROMOTION] };
@@ -42,7 +40,7 @@ export class ProductService {
       }
     }
 
-    products = await ProductModel.find(query)
+    const products: Product[] = await ProductModel.find(query)
       .populate({
         path: "owner",
         model: "User",
@@ -78,20 +76,32 @@ export class ProductService {
   }
 
   public async findProductsByCategory(
-    categoryId: Types.ObjectId
-  ): Promise<Product[]> {
+    categoryId: Types.ObjectId,
+    { take, sort, filter, skips, totalItemsToSkip }: GetProductsArgs
+  ): Promise<InfiniteScrollProducts> {
     const findCategory: Category = await CategoryModel.findById(categoryId);
 
     if (!findCategory) throw new Error("Category does't exists");
 
-    const products: Product[] = await ProductModel.find({
-      category: categoryId,
-    }).populate({
-      path: "category",
-      model: "Category",
-    });
+    const query: FilterQuery<Product> = { category: categoryId };
 
-    return products;
+    const products: Product[] = await ProductModel.find(query)
+      .populate({
+        path: "owner",
+        model: "User",
+      })
+      .populate({
+        path: "category",
+        model: "Category",
+      })
+      .sort({ [sort.by]: sort.order })
+      .skip(skips)
+      .limit(take);
+
+    const totalDocs = await ProductModel.find(query).countDocuments();
+    const hasMore = totalDocs > totalItemsToSkip;
+
+    return { products, hasMore };
   }
 
   public async findRelatedProducts(
