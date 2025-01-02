@@ -72,7 +72,7 @@ export class ProductResolver {
     return product;
   }
 
-  @Query(() => [Product])
+  @Query(() => InfiniteScrollProducts)
   public async getProductsByCategory(
     @Arg("categoryId") categoryId: Types.ObjectId,
     @Args() options: GetProductsArgs
@@ -94,15 +94,17 @@ export class ProductResolver {
     return products;
   }
 
-  @Query(() => [Product])
+  @Query(() => InfiniteScrollProducts)
   public async getProductsByUserId(
-    @Arg("userId") userId: Types.ObjectId
-  ): Promise<Product[]> {
-    const products: Product[] = await this.productService.findProductsByOwner(
-      userId
+    @Arg("userId") userId: Types.ObjectId,
+    @Args() options: GetProductsArgs
+  ): Promise<InfiniteScrollProducts> {
+    const { products, hasMore } = await this.productService.findProductsByOwner(
+      userId,
+      options
     );
 
-    return products;
+    return { products, hasMore };
   }
 
   @Authorized()

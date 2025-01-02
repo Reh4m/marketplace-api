@@ -120,19 +120,33 @@ export class ProductService {
     return products;
   }
 
-  public async findProductsByOwner(userId: Types.ObjectId): Promise<Product[]> {
+  public async findProductsByOwner(
+    userId: Types.ObjectId,
+    { take, sort, filter, skips, totalItemsToSkip }: GetProductsArgs
+  ): Promise<InfiniteScrollProducts> {
     const findUser: User = await UserModel.findById(userId);
 
     if (!findUser) throw new Error("User doesn't exists");
 
-    const products: Product[] = await ProductModel.find({ owner: userId })
+    const query: FilterQuery<Product> = { owner: userId };
+
+    const products: Product[] = await ProductModel.find(query)
+      .populate({
+        path: "owner",
+        model: "User",
+      })
       .populate({
         path: "category",
         model: "Category",
       })
-      .sort({ createdAt: "desc" });
+      .sort({ [sort.by]: sort.order })
+      .skip(skips)
+      .limit(take);
 
-    return products;
+    const totalDocs = await ProductModel.find(query).countDocuments();
+    const hasMore = totalDocs > totalItemsToSkip;
+
+    return { products, hasMore };
   }
 
   public async createNewProduct(
