@@ -34,6 +34,6 @@ export class CreateOrderDetailsInput implements Partial<OrderDetails> {
   @Field(() => Int, { nullable: true })
   @IsNumber()
   @Min(0)
-  @Max(0)
+  @Max(100)
   discount?: number;
 }
