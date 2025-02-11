@@ -8,10 +8,10 @@ import {
   ValidateNested,
   IsEnum,
 } from "class-validator";
-import { Types } from "mongoose";
+import { FilterQuery, Types } from "mongoose";
 import { Field, InputType, Int } from "type-graphql";
 
-import { Condition } from "@models/products.model";
+import { Condition, Product } from "@models/products.model";
 
 @InputType()
 class FilterProductsByPriceInput {
@@ -27,7 +27,7 @@ class FilterProductsByPriceInput {
 }
 
 @InputType()
-export class FilterProductsInput {
+export class FilterProductsInput implements FilterQuery<Product> {
   @Field({ nullable: true })
   @IsNotEmpty()
   category?: Types.ObjectId;
