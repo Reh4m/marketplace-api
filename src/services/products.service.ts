@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOptions, Types } from "mongoose";
+import { FilterQuery, Types } from "mongoose";
 import { Service } from "typedi";
 
 import {
@@ -14,33 +14,30 @@ import { InfiniteScrollProducts } from "@typedefs/products.type";
 
 @Service()
 export class ProductService {
-  public async findAllProducts({
-    take,
-    sort,
-    filter,
-    skips,
-    totalItemsToSkip,
-  }: GetProductsArgs): Promise<InfiniteScrollProducts> {
-    const query: FilterQuery<Product> = {};
+  private readonly DEFAULT_PRODUCT_FILTER: FilterQuery<Product> = {
+    status: { $in: [Status.AVAILABLE, Status.ON_PROMOTION] },
+  };
 
-    query.status = { $in: [Status.AVAILABLE, Status.ON_PROMOTION] };
-
+  private async findProducts(
+    filters: FilterQuery<Product>,
+    { take, sort, filter, skips, totalItemsToSkip }: GetProductsArgs
+  ): Promise<InfiniteScrollProducts> {
     if (filter) {
       if (filter.priceRange) {
-        query.price = {
+        filters.price = {
           $gte: filter.priceRange.min,
           $lte: filter.priceRange.max,
         };
       }
       if (filter.category) {
-        query.category = filter.category;
+        filters.category = filter.category;
       }
       if (filter.condition) {
-        query.condition = { $in: filter.condition };
+        filters.condition = { $in: filter.condition };
       }
     }
 
-    const products: Product[] = await ProductModel.find(query)
+    const products: Product[] = await ProductModel.find(filters)
       .populate({
         path: "owner",
         model: "User",
@@ -53,8 +50,18 @@ export class ProductService {
       .skip(skips)
       .limit(take);
 
-    const totalDocs = await ProductModel.find(query).countDocuments();
+    const totalDocs = await ProductModel.find(filters).countDocuments();
     const hasMore = totalDocs > totalItemsToSkip;
+
+    return { products, hasMore };
+  }
+
+  public async findAllProducts(
+    options: GetProductsArgs
+  ): Promise<InfiniteScrollProducts> {
+    const filters: FilterQuery<Product> = { ...this.DEFAULT_PRODUCT_FILTER };
+
+    const { products, hasMore } = await this.findProducts(filters, options);
 
     return { products, hasMore };
   }
@@ -77,29 +84,18 @@ export class ProductService {
 
   public async findProductsByCategory(
     categoryId: Types.ObjectId,
-    { take, sort, filter, skips, totalItemsToSkip }: GetProductsArgs
+    options: GetProductsArgs
   ): Promise<InfiniteScrollProducts> {
     const findCategory: Category = await CategoryModel.findById(categoryId);
 
     if (!findCategory) throw new Error("Category does't exists");
 
-    const query: FilterQuery<Product> = { category: categoryId };
+    const filters: FilterQuery<Product> = {
+      ...this.DEFAULT_PRODUCT_FILTER,
+      category: categoryId,
+    };
 
-    const products: Product[] = await ProductModel.find(query)
-      .populate({
-        path: "owner",
-        model: "User",
-      })
-      .populate({
-        path: "category",
-        model: "Category",
-      })
-      .sort({ [sort.by]: sort.order })
-      .skip(skips)
-      .limit(take);
-
-    const totalDocs = await ProductModel.find(query).countDocuments();
-    const hasMore = totalDocs > totalItemsToSkip;
+    const { products, hasMore } = await this.findProducts(filters, options);
 
     return { products, hasMore };
   }
@@ -122,29 +118,18 @@ export class ProductService {
 
   public async findProductsByOwner(
     userId: Types.ObjectId,
-    { take, sort, filter, skips, totalItemsToSkip }: GetProductsArgs
+    options: GetProductsArgs
   ): Promise<InfiniteScrollProducts> {
     const findUser: User = await UserModel.findById(userId);
 
     if (!findUser) throw new Error("User doesn't exists");
 
-    const query: FilterQuery<Product> = { owner: userId };
+    const filters: FilterQuery<Product> = {
+      ...this.DEFAULT_PRODUCT_FILTER,
+      owner: userId,
+    };
 
-    const products: Product[] = await ProductModel.find(query)
-      .populate({
-        path: "owner",
-        model: "User",
-      })
-      .populate({
-        path: "category",
-        model: "Category",
-      })
-      .sort({ [sort.by]: sort.order })
-      .skip(skips)
-      .limit(take);
-
-    const totalDocs = await ProductModel.find(query).countDocuments();
-    const hasMore = totalDocs > totalItemsToSkip;
+    const { products, hasMore } = await this.findProducts(filters, options);
 
     return { products, hasMore };
   }
