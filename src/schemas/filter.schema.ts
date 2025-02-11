@@ -9,18 +9,9 @@ import {
   IsEnum,
 } from "class-validator";
 import { Types } from "mongoose";
-import { Field, InputType, Int, ObjectType } from "type-graphql";
+import { Field, InputType, Int } from "type-graphql";
 
 import { Condition } from "@models/products.model";
-
-@ObjectType()
-class ProductsFilterByPrice {
-  @Field((_type) => Int)
-  min: number;
-
-  @Field((_type) => Int)
-  max: number;
-}
 
 @InputType()
 class FilterProductsByPriceInput {
@@ -46,7 +37,7 @@ export class FilterProductsInput {
   @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => FilterProductsByPriceInput)
-  priceRange?: ProductsFilterByPrice;
+  priceRange?: FilterProductsByPriceInput;
 
   @Field((_type) => [Condition], { nullable: true })
   @IsNotEmpty()
